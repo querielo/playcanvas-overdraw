@@ -16,7 +16,7 @@ const isProduction = process.env.NODE_ENV == "production";
 
 const config = {
     entry: {
-        "components-from-git": "./src/index.ts",
+        "overdraw": "./src/index.ts",
     },
     output: {
         path: path.resolve(__dirname, "dist"),
