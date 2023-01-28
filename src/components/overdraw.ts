@@ -12,7 +12,7 @@ const COLORS = [
     new Float32Array([0, 0, 0, 1]),
 ];
 
-class Overdraw extends pc.ScriptType {
+export class Overdraw extends pc.ScriptType {
     public layers: string[] = [];
 
     private isActive = false;
@@ -56,7 +56,7 @@ void main(void)
             }
         }
 
-        this.on("attr", (name, value) => {
+        this.on("attr", () => {
             for (const layer of this.app.scene.layers.layerList) {
                 layer.onPreRender = () => {};
                 layer.onPostRender = () => {};
@@ -73,7 +73,7 @@ void main(void)
 
     public postInitialize(): void {}
 
-    public update(dt: number) {
+    public update() {
         this.isActive = this.app.keyboard.isPressed(pc.KEY_V);
     }
 
@@ -90,7 +90,10 @@ void main(void)
             zpass: pc.STENCILOP_INCREMENT,
         });
 
-        const materialToStencil = new Map<pc.Material, [pc.StencilParameters, pc.StencilParameters]>();
+        const materialToStencil = new Map<
+            pc.Material,
+            [pc.StencilParameters, pc.StencilParameters]
+        >();
 
         layer.onPreRender = () => {
             if (!this.isActive) {
@@ -100,10 +103,16 @@ void main(void)
             // @ts-ignore
             const listInstances = layer.instances;
 
-            for (const instanceList of [listInstances.transparentMeshInstances, listInstances.opaqueMeshInstances]) {
+            for (const instanceList of [
+                listInstances.transparentMeshInstances,
+                listInstances.opaqueMeshInstances,
+            ]) {
                 for (const instance of instanceList) {
                     const material = instance.material;
-                    materialToStencil.set(material, [material.stencilBack, material.stencilFront]);
+                    materialToStencil.set(material, [
+                        material.stencilBack,
+                        material.stencilFront,
+                    ]);
 
                     material.stencilBack = material.stencilFront = stencil;
                 }
@@ -115,7 +124,10 @@ void main(void)
                 return;
             }
 
-            for (const [material, [stencilBack, stencilFront]] of materialToStencil) {
+            for (const [
+                material,
+                [stencilBack, stencilFront],
+            ] of materialToStencil) {
                 material.stencilBack = stencilBack;
                 material.stencilFront = stencilFront;
             }
@@ -129,13 +141,31 @@ void main(void)
 
                 graphicsDevice.setStencilTest(true);
                 if (i === COLORS.length - 1) {
-                    graphicsDevice.setStencilFunc(pc.FUNC_LESSEQUAL, i + 1, 0xffffff);
+                    graphicsDevice.setStencilFunc(
+                        pc.FUNC_LESSEQUAL,
+                        i + 1,
+                        0xffffff
+                    );
                 } else {
-                    graphicsDevice.setStencilFunc(pc.FUNC_EQUAL, i + 1, 0xffffff);
+                    graphicsDevice.setStencilFunc(
+                        pc.FUNC_EQUAL,
+                        i + 1,
+                        0xffffff
+                    );
                 }
-                graphicsDevice.setStencilOperation(pc.STENCILOP_KEEP, pc.STENCILOP_KEEP, pc.STENCILOP_KEEP, 0xffffff);
+                graphicsDevice.setStencilOperation(
+                    pc.STENCILOP_KEEP,
+                    pc.STENCILOP_KEEP,
+                    pc.STENCILOP_KEEP,
+                    0xffffff
+                );
 
-                pc.drawFullscreenQuad(graphicsDevice, graphicsDevice.getRenderTarget(), this.vertexBuffer, this.shader);
+                pc.drawFullscreenQuad(
+                    graphicsDevice,
+                    graphicsDevice.getRenderTarget(),
+                    this.vertexBuffer,
+                    this.shader
+                );
             }
         };
     }

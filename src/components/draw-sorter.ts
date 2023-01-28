@@ -1,4 +1,4 @@
-class DrawSorter extends pc.ScriptType {
+export class DrawSorter extends pc.ScriptType {
     public config: {
         layer: string;
         opaque: number;
@@ -8,14 +8,14 @@ class DrawSorter extends pc.ScriptType {
     public initialize() {
         this.updateSortMode();
 
-        this.on("attr", (name, value) => {
+        this.on("attr", () => {
             this.updateSortMode();
         });
     }
 
     public postInitialize(): void {}
 
-    public update(dt: number) {}
+    public update() {}
 
     public postUpdate(): void {}
 
