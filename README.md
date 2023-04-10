@@ -7,6 +7,8 @@ The repo contains the next Typescript ScriptComponents for [Playcanvas](https://
 - **overdraw**. It is used to visualize pixel overdraw. Color of pixel measures the number of times a pixel is drawn on top of itself. The more red a pixel is, the more overdraw it has. The more overdraw a pixel has, the more work the GPU has to do to draw it.
 - **draw-sorter**. It is used to change sorting method in the scene based on distance of objects to the camera. It is used to reduce pixel overdraw.
 
+<img width="1496" alt="Screenshot 2023-04-10 at 13 53 54" src="https://user-images.githubusercontent.com/104348270/230879728-15ff5f4e-f48c-4bff-a07f-e4e1520094d1.png">
+
 The repo is based on the [Playcanvas TypeScript Template](https://github.com/querielo/playcanvas-typescript-template). I highly recommend you to check it out. Read more about usage of Playcanvas Overdraw in the Playcanvas TypeScript Template.
 
 # Pixel Overdraw
