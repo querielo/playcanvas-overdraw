@@ -1,4 +1,6 @@
+import { Vec4 } from "playcanvas";
 import { createFullscreenQuad } from "../utils/createFullscreenQuad";
+import { drawQuadWithShader } from "../utils/drawQuadWithShader";
 
 const COLORS = [
     new Float32Array([43 / 255, 0 / 255, 255 / 255, 1]),
@@ -84,9 +86,10 @@ void main(void)
     }
 
     private prepareLayer(layer: pc.Layer) {
-        const graphicsDevice = pc.app.graphicsDevice;
+        const graphicsDevice = pc.app.graphicsDevice as pc.GraphicsDevice;
 
         const stencil = new pc.StencilParameters({
+            func: pc.FUNC_ALWAYS,
             zpass: pc.STENCILOP_INCREMENT,
         });
 
@@ -139,31 +142,24 @@ void main(void)
 
                 graphicsDevice.scope.resolve("uColor").setValue(color);
 
-                graphicsDevice.setStencilTest(true);
-                if (i === COLORS.length - 1) {
-                    graphicsDevice.setStencilFunc(
-                        pc.FUNC_LESSEQUAL,
-                        i + 1,
-                        0xffffff
-                    );
-                } else {
-                    graphicsDevice.setStencilFunc(
-                        pc.FUNC_EQUAL,
-                        i + 1,
-                        0xffffff
-                    );
-                }
-                graphicsDevice.setStencilOperation(
-                    pc.STENCILOP_KEEP,
-                    pc.STENCILOP_KEEP,
-                    pc.STENCILOP_KEEP,
-                    0xffffff
-                );
+                const stencilState = new pc.StencilParameters({
+                    fail: pc.STENCILOP_KEEP,
+                    zfail: pc.STENCILOP_KEEP,
+                    zpass: pc.STENCILOP_KEEP,
+                    ref: i,
+                });
 
-                pc.drawFullscreenQuad(
+                if (i === COLORS.length - 1) {
+                    stencilState.func = pc.FUNC_LESSEQUAL;
+                } else {
+                    stencilState.func = pc.FUNC_EQUAL;
+                }
+
+                graphicsDevice.setStencilState(stencilState, stencilState);
+
+                drawQuadWithShader(
                     graphicsDevice,
                     graphicsDevice.getRenderTarget(),
-                    this.vertexBuffer,
                     this.shader
                 );
             }

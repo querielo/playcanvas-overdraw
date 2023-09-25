@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "fs-extra": "^11.1.0",
-    "playcanvas": "^1.58.2"
+    "playcanvas": "^1.65.3"
   }
 }

@@ -16,7 +16,8 @@ const isProduction = process.env.NODE_ENV == "production";
 
 const config = {
     entry: {
-        "overdraw": "./src/index.ts",
+        "overdraw": "./src/overdraw.ts",
+        "utils": "./src/index.ts",
     },
     output: {
         path: path.resolve(__dirname, "dist"),
