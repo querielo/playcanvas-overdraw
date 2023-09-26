@@ -1,4 +1,3 @@
-import { Vec4 } from "playcanvas";
 import { createFullscreenQuad } from "../utils/createFullscreenQuad";
 import { drawQuadWithShader } from "../utils/drawQuadWithShader";
 
